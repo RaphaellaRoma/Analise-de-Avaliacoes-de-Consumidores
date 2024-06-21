@@ -17,6 +17,13 @@ generos = []
 diretores = []
 sinopses = []
 bilheterias = []
+# Porcentagem de avaliações dos críticos
+tomatometer_scores = []
+# Porcentagem de avaliações do público
+audience_scores = []
+# Número de avaliações dos críticos
+number_scores = []
+
 
 # Identificar os links de redirecionamento para cada filme da pagina
 # Obs: precisamos dividir em duas partes pois o link de alguns filmes estava em um atributo diferente
@@ -82,6 +89,25 @@ for link_filme in links_filmes:
         elif 'Director' in dt_text:
             diretor = ', '.join(dd_texts) if dd_texts else None
     
+    # Porcentagem de avaliações dos críticos usando a mesma lógica feita para pegar a sinopse
+    tomatometer_score_element = filme_soup.find('rt-button', attrs={'slot': 'criticsScore'})
+    if tomatometer_score_element:
+        tomatometer_score_text = tomatometer_score_element.find('rt-text')
+        if tomatometer_score_text:
+            tomatometer_score = tomatometer_score_text.text.strip()
+            
+    # Número de avaliações dos críticos usando a mesma lógica feita para pegar a sinopse
+    number_score_text = filme_soup.find('rt-link', attrs={'slot': 'criticsReviews'})
+    if number_score_text:
+        number_score = number_score_text.text.strip()
+            
+    # Porcentagem de avaliações do público usando a mesma lógica feita para pegar a sinopse
+    audience_score_element = filme_soup.find('rt-button', attrs={'slot': 'audienceScore'})
+    if audience_score_element:
+        audience_score_text = audience_score_element.find('rt-text')
+        if audience_score_text:
+            audience_score = audience_score_text.text.strip()
+    
     # Armazenando nas listas 
     titulos.append(titulo)
     sinopses.append(sinopse)
@@ -89,9 +115,13 @@ for link_filme in links_filmes:
     generos.append(genero) 
     diretores.append(diretor)
     bilheterias.append(bilheteria)
+    
+    tomatometer_scores.append(tomatometer_score)
+    audience_scores.append(audience_score)
+    number_scores.append(number_score)
 
 # Mostrar os resultados
-for titulo, sinopse, lancamento, genero, diretor, bilheteria in zip(titulos, sinopses, lancamentos, generos, diretores, bilheterias):
+"""for titulo, sinopse, lancamento, genero, diretor, bilheteria in zip(titulos, sinopses, lancamentos, generos, diretores, bilheterias):
     print(f"Título: {titulo}")
     print(f"Data de lançamento: {lancamento}")
     print(f"Gênero: {genero}")
@@ -99,9 +129,15 @@ for titulo, sinopse, lancamento, genero, diretor, bilheteria in zip(titulos, sin
     print(f"Sinopse: {sinopse}")
     print(f"Bilheteria (bruto EUA): {bilheteria}")
     print("-" * 20)
+    print(" ")"""
+
+for titulo, tomatometer_score, audience_score, number_score in zip(titulos, tomatometer_scores, audience_scores, number_scores):
+    print(f"Título: {titulo}")
+    print(f"Avaliação de críticos: {tomatometer_score}")
+    print(f"Avaliação do público: {audience_score}")
+    print(f"Número de avaliações de críticos: {number_score}")
+    print("-" * 20)
     print(" ")
-
-
 
 
 
