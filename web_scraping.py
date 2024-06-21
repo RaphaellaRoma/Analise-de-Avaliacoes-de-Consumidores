@@ -142,7 +142,7 @@ for link_filme in links_filmes:
     audience_consensus.append(audience_consensu)
 
 # Mostrar os resultados
-"""for titulo, sinopse, lancamento, genero, diretor, bilheteria in zip(titulos, sinopses, lancamentos, generos, diretores, bilheterias):
+for titulo, sinopse, lancamento, genero, diretor, bilheteria, tomatometer_score, audience_score, number_score, critics_consensu, audience_consensu in zip(titulos, sinopses, lancamentos, generos, diretores, bilheterias, tomatometer_scores, audience_scores, number_scores, critics_consensus, audience_consensus):
     print(f"Título: {titulo}")
     print(f"Data de lançamento: {lancamento}")
     print(f"Gênero: {genero}")
@@ -150,18 +150,10 @@ for link_filme in links_filmes:
     print(f"Sinopse: {sinopse}")
     print(f"Bilheteria (bruto EUA): {bilheteria}")
     print("-" * 20)
-    print(" ")"""
-
-"""for titulo, tomatometer_score, audience_score, number_score, critics_consensu, audience_consensu in zip(titulos, tomatometer_scores, audience_scores, number_scores, critics_consensus, audience_consensus):
-    print(f"Título: {titulo}")
     print(f"Avaliação de críticos: {tomatometer_score}")
     print(f"Avaliação do público: {audience_score}")
     print(f"Número de avaliações de críticos: {number_score}")
     print(f"Consenso dos críticos: {critics_consensu}")
     print(f"Consenso do público: {audience_consensu}")
     print("-" * 20)
-    print(" ")"""
-
-
-
-
+    print(" ")
