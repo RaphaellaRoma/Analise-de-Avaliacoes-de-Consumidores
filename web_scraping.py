@@ -23,7 +23,10 @@ tomatometer_scores = []
 audience_scores = []
 # Número de avaliações dos críticos
 number_scores = []
-
+# Consenso dos críticos
+critics_consensus = []
+# Consenso do público
+audience_consensus = []
 
 # Identificar os links de redirecionamento para cada filme da pagina
 # Obs: precisamos dividir em duas partes pois o link de alguns filmes estava em um atributo diferente
@@ -61,6 +64,8 @@ for link_filme in links_filmes:
     genero = None
     diretor = None
     bilheteria = None
+    critics_consensu = None
+    audience_consensu = None
     
     dt_elements = filme_soup.find_all('dt')
     dd_elements = filme_soup.find_all('dd')
@@ -108,6 +113,20 @@ for link_filme in links_filmes:
         if audience_score_text:
             audience_score = audience_score_text.text.strip()
     
+    # Consenso dos críticos usando a mesma lógica feita para pegar a sinopse
+    critics_consensu_element = filme_soup.find('div', attrs={'id': 'critics-consensus'})
+    if critics_consensu_element:
+        critics_consensu_text = critics_consensu_element.find('p')
+        if critics_consensu_text:
+            critics_consensu = critics_consensu_text.text.strip()
+            
+    # Consenso do público usando a mesma lógica feita para pegar a sinopse
+    audience_consensu_element = filme_soup.find('div', attrs={'id': 'audience-consensus'})
+    if audience_consensu_element:
+        audience_consensu_text = audience_consensu_element.find('p')
+        if audience_consensu_text:
+            audience_consensu = audience_consensu_text.text.strip()
+    
     # Armazenando nas listas 
     titulos.append(titulo)
     sinopses.append(sinopse)
@@ -119,6 +138,8 @@ for link_filme in links_filmes:
     tomatometer_scores.append(tomatometer_score)
     audience_scores.append(audience_score)
     number_scores.append(number_score)
+    critics_consensus.append(critics_consensu)
+    audience_consensus.append(audience_consensu)
 
 # Mostrar os resultados
 """for titulo, sinopse, lancamento, genero, diretor, bilheteria in zip(titulos, sinopses, lancamentos, generos, diretores, bilheterias):
@@ -131,11 +152,12 @@ for link_filme in links_filmes:
     print("-" * 20)
     print(" ")"""
 
-for titulo, tomatometer_score, audience_score, number_score in zip(titulos, tomatometer_scores, audience_scores, number_scores):
+for titulo, tomatometer_score, audience_score, number_score, critics_consensu, audience_consensu in zip(titulos, tomatometer_scores, audience_scores, number_scores, critics_consensus, audience_consensus):
     print(f"Título: {titulo}")
     print(f"Avaliação de críticos: {tomatometer_score}")
     print(f"Avaliação do público: {audience_score}")
     print(f"Número de avaliações de críticos: {number_score}")
+    print(f"Consenso dos críticos: {critics_consensu}")
     print("-" * 20)
     print(" ")
 
