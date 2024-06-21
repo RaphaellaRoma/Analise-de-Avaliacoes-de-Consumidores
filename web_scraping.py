@@ -152,14 +152,15 @@ for link_filme in links_filmes:
     print("-" * 20)
     print(" ")"""
 
-for titulo, tomatometer_score, audience_score, number_score, critics_consensu, audience_consensu in zip(titulos, tomatometer_scores, audience_scores, number_scores, critics_consensus, audience_consensus):
+"""for titulo, tomatometer_score, audience_score, number_score, critics_consensu, audience_consensu in zip(titulos, tomatometer_scores, audience_scores, number_scores, critics_consensus, audience_consensus):
     print(f"Título: {titulo}")
     print(f"Avaliação de críticos: {tomatometer_score}")
     print(f"Avaliação do público: {audience_score}")
     print(f"Número de avaliações de críticos: {number_score}")
     print(f"Consenso dos críticos: {critics_consensu}")
+    print(f"Consenso do público: {audience_consensu}")
     print("-" * 20)
-    print(" ")
+    print(" ")"""
 
 
 
