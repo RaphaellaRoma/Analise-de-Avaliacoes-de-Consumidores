@@ -128,6 +128,7 @@ for link_filme in links_filmes:
             audience_consensu = audience_consensu_text.text.strip()
     
     # Armazenando nas listas 
+    
     titulos.append(titulo)
     sinopses.append(sinopse)
     lancamentos.append(lancamento)
