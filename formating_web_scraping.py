@@ -31,7 +31,7 @@ def declarar_listas():
         
     return lista
 
-#funcao para econtrar a terminação dos links
+#encontrando a terminação dos links
 def encontrar_link():
     links_filmes = lista[11]
     filmes_elements = soup.find_all("a", class_="js-tile-link") + soup.find_all("a", attrs={'data-track': 'scores'})
@@ -46,29 +46,56 @@ url = "https://www.rottentomatoes.com/browse/movies_in_theaters/"
 soup = scraping(url)
 lista = declarar_listas()
 
+#limpando os dados do scraping e separando-os em cada uma de suas listas
+def separar_elementos(filme_arg, string, strain, element_arg, posicao):
+    info = lista[posicao]
+    element = filme_soup.find(f"{filme_arg}", attrs={f"{string}" : f"{strain}"})
+    if element and len(element_arg) >= 1:
+        text = element.find(f"{element_arg}")
+        if text:
+            info = text.text.strip()
+            if not info:
+                info = "nd%"
+    elif element:
+        info = element.text.strip()
+        if info == "Reviews":
+            info = "nd " + info
+    else: 
+        info = "empty" 
+    return info
+
+def separar_elementos2(filme_arg, class_, element_arg, posicao):
+    info = lista[posicao]
+    element = filme_soup.find(f"{filme_arg}", attrs=f"{class_}")
+    if element:
+        if posicao == 4:
+            text = element.find_all(f"{element_arg}")
+            if len(text) > 1:
+                info = text[1].text.strip()
+        else:
+            text = element.find(f"{element_arg}")
+            if text:
+                info = text.text.strip() 
+    return info
+
 # O filme_url contém o endereço da pagina principal mais a terminação que redireciona para um filme especifico
 for link_filme in encontrar_link():
     filme_url = "https://www.rottentomatoes.com" + link_filme
     filme_soup = scraping(filme_url)
     
-    # Encontrando o nome do filme
-    titulo = filme_soup.find("h1", class_="unset").find('span').text.strip()
-    
-    # A sinopse está dentro de <rt-text> que está dentro de uma div que contém dois <rt-text>, mas so queremos o segundo
-    sinopse_element = filme_soup.find("div", class_="synopsis-wrap")
-    if sinopse_element:
-        sinopse_rt_texts = sinopse_element.find_all('rt-text')
-        if len(sinopse_rt_texts) > 1:
-            sinopse = sinopse_rt_texts[1].text.strip()
-    
     # Encontrando informações básicas do filme que são fornecidas em uma lista, ou seja, as informações estão em um mesmo tipo de elemento dt e dd
     # precisamos então diferencia-las pelo texto
+    titulo = None
+    sinopse = None
     lancamento = None
     genero = None
     diretor = None
     bilheteria = None
     critics_consensu = None
     audience_consensu = None
+    tomatometer_score = None
+    audience_score = None
+    number_score = None
     
     dt_elements = filme_soup.find_all('dt')
     dd_elements = filme_soup.find_all('dd')
@@ -98,38 +125,16 @@ for link_filme in encontrar_link():
             diretor = ', '.join(dd_texts) if dd_texts else None
     
     # Porcentagem de avaliações dos críticos usando a mesma lógica feita para pegar a sinopse
-    tomatometer_score_element = filme_soup.find('rt-button', attrs={'slot': 'criticsScore'})
-    if tomatometer_score_element:
-        tomatometer_score_text = tomatometer_score_element.find('rt-text')
-        if tomatometer_score_text:
-            tomatometer_score = tomatometer_score_text.text.strip()
-            
-    # Número de avaliações dos críticos usando a mesma lógica feita para pegar a sinopse
-    number_score_text = filme_soup.find('rt-link', attrs={'slot': 'criticsReviews'})
-    if number_score_text:
-        number_score = number_score_text.text.strip()
-            
-    # Porcentagem de avaliações do público usando a mesma lógica feita para pegar a sinopse
-    audience_score_element = filme_soup.find('rt-button', attrs={'slot': 'audienceScore'})
-    if audience_score_element:
-        audience_score_text = audience_score_element.find('rt-text')
-        if audience_score_text:
-            audience_score = audience_score_text.text.strip()
+   
+    critics_consensu = separar_elementos("div", "id", "critics-consensus", "p", 9)
+    audience_consensu = separar_elementos("div", "id", "audience-consensus", "p", 10)
+    tomatometer_score = separar_elementos("rt-button", "slot", "criticsScore", "rt-text", 6)
+    audience_score = separar_elementos("rt-button", "slot", "audienceScore", "rt-text", 7)
+    number_score = separar_elementos("rt-link", "slot", "criticsReviews", "", 8)
     
-    # Consenso dos críticos usando a mesma lógica feita para pegar a sinopse
-    critics_consensu_element = filme_soup.find('div', attrs={'id': 'critics-consensus'})
-    if critics_consensu_element:
-        critics_consensu_text = critics_consensu_element.find('p')
-        if critics_consensu_text:
-            critics_consensu = critics_consensu_text.text.strip()
-            
-    # Consenso do público usando a mesma lógica feita para pegar a sinopse
-    audience_consensu_element = filme_soup.find('div', attrs={'id': 'audience-consensus'})
-    if audience_consensu_element:
-        audience_consensu_text = audience_consensu_element.find('p')
-        if audience_consensu_text:
-            audience_consensu = audience_consensu_text.text.strip()
-    
+    titulo = separar_elementos2("h1", "unset", "span", 0)
+    sinopse = separar_elementos2("div", "synopsis-wrap", "rt-text", 4)
+           
     # Armazenando nas listas 
     
     lista[0].append(titulo)
@@ -145,7 +150,7 @@ for link_filme in encontrar_link():
     lista[9].append(critics_consensu)
     lista[10].append(audience_consensu)
 
-
+#main
 listas = declarar_listas()    
 def escrever_filmes(lista, listas):
     i = 0
@@ -166,4 +171,5 @@ def escrever_filmes(lista, listas):
         print(" ")
         i += 1
 
+#main
 escrever_filmes(lista, listas)
