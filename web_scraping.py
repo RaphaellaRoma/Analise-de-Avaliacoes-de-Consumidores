@@ -121,9 +121,9 @@ def separar_lan_bil_gen_dir():
     return info
 
 #Trancrevendo os dados para confirmação (opcional)
-def escrever_filmes(lista, listas):
+def escrever_filmes(lista):
     i = 0
-    while i < len(listas):  
+    while i < len(lista[0]):  
         print(f"Título: {lista[0][i]}")
         print(f"Data de lançamento: {lista[1][i]}")
         print(f"Gênero: {lista[2][i]}")
@@ -183,9 +183,8 @@ def call_main():
         lista[8].append(number_score)
         lista[9].append(critics_consensu)
         lista[10].append(audience_consensu)
-        
-    listas = declarar_listas()
-    escrever_filmes(lista, listas)
+
+    #escrever_filmes(lista)
 
 #chamando a main
 call_main()
