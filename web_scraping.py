@@ -1,7 +1,7 @@
 #importando as bibliotecas necessárias
 import requests
 from bs4 import BeautifulSoup
-import pandas as pd
+import re
 
 #scraping de paginas
 def scraping(url):
@@ -23,11 +23,12 @@ def declarar_listas():
     critics_consensus = []
     audience_consensus = []
     links_filmes = []
+    audience_reviews = []
     
     lista = titulos, lancamentos, generos, diretores,\
         sinopses, bilheterias, tomatometer_scores,\
         audience_scores, number_scores, critics_consensus,\
-        audience_consensus, links_filmes
+        audience_consensus, links_filmes, audience_reviews
         
     return lista
 
@@ -54,8 +55,14 @@ def separar_critics_audience(filme_arg, string, strain, element_arg, posicao):
                 info = "nd%"
     elif element:
         info = element.text.strip()
-        if info == "Reviews":
-            info = "nd " + info
+        
+        temp = re.findall(r'\d+', info)
+        temp = ''.join(temp[0:])
+        
+        info = temp + " Reviews"
+        
+        if info == " Reviews":
+            info = "nd" + info
     else: 
         info = "empty" 
     return info
@@ -134,6 +141,7 @@ def escrever_filmes(lista):
         print(f"Avaliação de críticos: {lista[6][i]}")
         print(f"Avaliação do público: {lista[7][i]}")
         print(f"Número de avaliações de críticos: {lista[8][i]}")
+        print(f"Número de avaliações de críticos: {lista[12][i]}")
         print(f"Consenso dos críticos: {lista[9][i]}")
         print(f"Consenso do público: {lista[10][i]}")
         print("-" * 20)
@@ -157,6 +165,7 @@ def call_main():
         tomatometer_score = None
         audience_score = None
         number_score = None
+        audience_review = None
 
         #chamamando cada tipo de informação separados
         titulo = separar_sinopse_titulo("h1", "unset", "span", 0)
@@ -170,6 +179,7 @@ def call_main():
         number_score = separar_critics_audience("rt-link", "slot", "criticsReviews", "", 8)
         critics_consensu = separar_critics_audience("div", "id", "critics-consensus", "p", 9)
         audience_consensu = separar_critics_audience("div", "id", "audience-consensus", "p", 10)
+        audience_review = separar_critics_audience("rt-link", "slot", "audienceReviews", "", 12)
         
         # Armazenando nas listas 
         lista[0].append(titulo)
@@ -183,6 +193,7 @@ def call_main():
         lista[8].append(number_score)
         lista[9].append(critics_consensu)
         lista[10].append(audience_consensu)
+        lista[12].append(audience_review)
 
     #escrever_filmes(lista)
 
