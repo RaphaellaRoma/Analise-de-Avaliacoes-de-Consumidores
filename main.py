@@ -8,10 +8,10 @@ def most_frequent():
     main_tropes = []
     
     while n < len(lista[0]):
-        while i < 20:
+        while i < 5:
             trope = gerar_trope(lista[4][n], lista[9][n], lista[10][n])
             tropes.append(trope)
-            if i == 19:
+            if i == 4:
                 main_trope = max(set(tropes), key = tropes.count)
                 main_tropes.append(main_trope)
             i += 1
