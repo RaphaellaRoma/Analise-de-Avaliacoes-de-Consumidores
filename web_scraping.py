@@ -52,17 +52,16 @@ def separar_critics_audience(filme_arg, string, strain, element_arg, posicao):
         if text:
             info = text.text.strip()
             if not info:
-                info = "nd%"
+                info = ""
     elif element:
         info = element.text.strip()
         
         temp = re.findall(r'\d+', info)
         temp = ''.join(temp[0:])
         
-        info = temp + " Reviews"
-        
-        if info == " Reviews":
-            info = "nd" + info
+        info = temp
+        if not info:
+            info = ""
     else: 
         info = "empty" 
     return info
