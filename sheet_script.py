@@ -4,8 +4,8 @@ from main import trope
 
 #incializando os excel
 wb = load_workbook('analise_de_filmes.xlsx')
+wb.active = wb["Tabela de Filmes"]
 ws = wb.active
-ws.title = "Tabela de Filmes"
 
 i = 0
 n = 0
